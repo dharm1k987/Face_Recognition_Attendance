@@ -16,3 +16,27 @@ print(labels)
 
 train_encodings = encoding.find_encoding(imgs)
 print(len(train_encodings))
+
+frameWidth = 960
+frameHeight = 720
+
+cap = cv2.VideoCapture(0)
+
+# width is id number 3, height is id 4
+cap.set(3, frameWidth)
+cap.set(4, frameHeight)
+
+# change brightness to 150
+cap.set(10, 150)
+
+while True:
+
+    success, img = cap.read()
+
+    cv2.imshow('window', img)
+
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+
+cv2.destroyAllWindows()
+cap.release()
