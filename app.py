@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 import face_recognition
 import os
+from img_encodings import encoding
 
 path = 'train_imgs'
 imgs = []
@@ -13,6 +14,9 @@ for file in os.listdir(path):
     labels.append(file.split('.')[0])
 
 print(labels)
+
+train_encodings = encoding.find_encoding(imgs)
+print(len(train_encodings))
 
 exit(1)
 
