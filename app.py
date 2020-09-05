@@ -1,6 +1,22 @@
 import cv2
 import numpy as np
 import face_recognition
+import os
+
+path = 'train_imgs'
+imgs = []
+labels = []
+
+for file in os.listdir(path):
+    img = cv2.imread(f'{path}/{file}', cv2.COLOR_BGR2RGB)
+    imgs.append(img)
+    labels.append(file.split('.')[0])
+
+print(labels)
+
+exit(1)
+
+
 
 print("Hello World")
 
