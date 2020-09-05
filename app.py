@@ -6,7 +6,7 @@ import numpy as np
 from csv_helper import csv
 from img_encodings import encoding
 
-path = 'train_imgs'
+path = 'student_imgs'
 imgs, labels = encoding.read_imgs(path)
 
 train_encodings = encoding.find_encoding(imgs)
