@@ -28,9 +28,10 @@ cap = cv2.VideoCapture(0)
 # cap.set(4, frameHeight)
 
 # change brightness to 150
-cap.set(10, 150)
+# cap.set(10, 150)
 
 prev = 0
+RESIZE_FACTOR = 4
 
 while True:
     time_elapsed = time.time() - prev
@@ -40,7 +41,7 @@ while True:
     if time_elapsed > 1. / frame_rate:
         prev = time.time()
 
-        img_resized = cv2.resize(img.copy(), None, fx=0.25, fy=0.25)
+        img_resized = cv2.resize(img.copy(), None, fx=1/RESIZE_FACTOR, fy=1/RESIZE_FACTOR)
         img_color = cv2.cvtColor(img_resized, cv2.COLOR_BGR2RGB)
 
         # find current face location and encodings
@@ -54,9 +55,14 @@ while True:
             # if they exist
             if matches[best_index]:
                 name = labels[best_index].upper()
-                print(name)
+                y1, x2, y2, x1 = list(map(lambda x: x * RESIZE_FACTOR, face_loc))
+                cv2.rectangle(img, (x1, y1), (x2, y2), (0,255,0),2)
+                cv2.rectangle(img, (x1,y2-35), (x2, y2), (0,255,0), cv2.FILLED)
+                cv2.putText(img, name, (x1+5, y2-5), cv2.FONT_HERSHEY_COMPLEX, 1, (255,255,255), 2)
 
-        cv2.imshow('result', img_resized)
+                # print(y1, x2, y2, x1)
+
+        cv2.imshow('result', img)
 
 
     wait = cv2.waitKey(1)
