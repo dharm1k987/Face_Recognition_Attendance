@@ -33,7 +33,13 @@ while True:
 
     success, img = cap.read()
 
-    cv2.imshow('window', img)
+    img_resized = cv2.resize(img.copy(), None, fx=0.5, fy=0.5)
+    img_color = cv2.cvtColor(img_resized, cv2.COLOR_BGR2RGB)
+
+    # find current face location and encodings
+    face_location, face_encodings = encoding.find_location_and_encoding(img_color)
+
+    cv2.imshow('window', img_resized)
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break

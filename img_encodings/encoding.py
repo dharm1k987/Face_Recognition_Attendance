@@ -7,3 +7,7 @@ def find_encoding(imgs):
         encodings.append(encode)
     return encodings
 
+def find_location_and_encoding(img):
+    location = face_recognition.face_locations(img)
+    encodings = face_recognition.face_encodings(img, location)
+    return location, encodings
