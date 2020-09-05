@@ -2,7 +2,9 @@ import cv2
 import numpy as np
 import os
 from img_encodings import encoding
+from csv_helper import csv
 import time
+
 path = 'train_imgs'
 imgs = []
 labels = []
@@ -59,6 +61,8 @@ while True:
                 cv2.rectangle(img, (x1, y1), (x2, y2), (0,255,0),2)
                 cv2.rectangle(img, (x1,y2-35), (x2, y2), (0,255,0), cv2.FILLED)
                 cv2.putText(img, name, (x1+5, y2-5), cv2.FONT_HERSHEY_COMPLEX, 0.5, (255,255,255), 2)
+                csv.mark_attendance(name)
+
 
                 # print(y1, x2, y2, x1)
 
