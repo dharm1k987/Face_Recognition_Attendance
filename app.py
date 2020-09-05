@@ -12,7 +12,7 @@ labels = []
 for file in os.listdir(path):
     img = cv2.imread(f'{path}/{file}', cv2.COLOR_BGR2RGB)
     imgs.append(img)
-    labels.append(file.split('.')[0])
+    labels.append(file.split('.')[0].strip().upper())
 
 print(labels)
 
@@ -34,6 +34,8 @@ cap = cv2.VideoCapture(0)
 
 prev = 0
 RESIZE_FACTOR = 4
+
+csv.initialize_csv()
 
 while True:
     time_elapsed = time.time() - prev
@@ -63,14 +65,12 @@ while True:
                 cv2.putText(img, name, (x1+5, y2-5), cv2.FONT_HERSHEY_COMPLEX, 0.5, (255,255,255), 2)
                 csv.mark_attendance(name)
 
-
-                # print(y1, x2, y2, x1)
-
         cv2.imshow('result', img)
 
 
     wait = cv2.waitKey(1)
     if wait & 0xFF == ord('q'):
+        csv.prepare_final_report(labels)
         break
 
 cv2.destroyAllWindows()
