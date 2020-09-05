@@ -6,18 +6,9 @@ from csv_helper import csv
 import time
 
 path = 'train_imgs'
-imgs = []
-labels = []
-
-for file in os.listdir(path):
-    img = cv2.imread(f'{path}/{file}', cv2.COLOR_BGR2RGB)
-    imgs.append(img)
-    labels.append(file.split('.')[0].strip().upper())
-
-print(labels)
+imgs, labels = encoding.read_imgs(path)
 
 train_encodings = encoding.find_encoding(imgs)
-print(len(train_encodings))
 
 frameWidth = 960
 frameHeight = 720

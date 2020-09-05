@@ -1,4 +1,18 @@
 import face_recognition
+import cv2
+import os
+
+def read_imgs(path):
+    imgs = []
+    labels = []
+
+    for file in os.listdir(path):
+        img = cv2.imread(f'{path}/{file}', cv2.COLOR_BGR2RGB)
+        imgs.append(img)
+        labels.append(file.split('.')[0].strip().upper())
+
+    return imgs, labels
+
 
 def find_encoding(imgs):
     encodings = []
