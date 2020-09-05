@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import os
 from img_encodings import encoding
-
+import time
 path = 'train_imgs'
 imgs = []
 labels = []
@@ -19,29 +19,48 @@ print(len(train_encodings))
 
 frameWidth = 960
 frameHeight = 720
+frame_rate = 30
 
 cap = cv2.VideoCapture(0)
 
 # width is id number 3, height is id 4
-cap.set(3, frameWidth)
-cap.set(4, frameHeight)
+# cap.set(3, frameWidth)
+# cap.set(4, frameHeight)
 
 # change brightness to 150
 cap.set(10, 150)
 
+prev = 0
+
 while True:
+    time_elapsed = time.time() - prev
 
     success, img = cap.read()
 
-    img_resized = cv2.resize(img.copy(), None, fx=0.5, fy=0.5)
-    img_color = cv2.cvtColor(img_resized, cv2.COLOR_BGR2RGB)
+    if time_elapsed > 1. / frame_rate:
+        prev = time.time()
 
-    # find current face location and encodings
-    face_location, face_encodings = encoding.find_location_and_encoding(img_color)
+        img_resized = cv2.resize(img.copy(), None, fx=0.25, fy=0.25)
+        img_color = cv2.cvtColor(img_resized, cv2.COLOR_BGR2RGB)
 
-    cv2.imshow('window', img_resized)
+        # find current face location and encodings
+        face_location, face_encodings = encoding.find_location_and_encoding(img_color)
 
-    if cv2.waitKey(1) & 0xFF == ord('q'):
+        # compare each face against the train_imgs
+        for face_encode, face_loc in zip(face_encodings, face_location):
+            matches, distance = encoding.find_location_and_distance(train_encodings, face_encode)
+            best_index = np.argmin(distance)
+
+            # if they exist
+            if matches[best_index]:
+                name = labels[best_index].upper()
+                print(name)
+
+        cv2.imshow('result', img_resized)
+
+
+    wait = cv2.waitKey(1)
+    if wait & 0xFF == ord('q'):
         break
 
 cv2.destroyAllWindows()
