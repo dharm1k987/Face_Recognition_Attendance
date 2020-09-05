@@ -2,6 +2,7 @@ import face_recognition
 import cv2
 import os
 
+
 def read_imgs(path):
     imgs = []
     labels = []
@@ -21,10 +22,12 @@ def find_encoding(imgs):
         encodings.append(encode)
     return encodings
 
+
 def find_location_and_encoding(img):
     location = face_recognition.face_locations(img)
     encodings = face_recognition.face_encodings(img, location)
     return location, encodings
+
 
 def find_location_and_distance(train_encodings, face_encoding):
     matches = face_recognition.compare_faces(train_encodings, face_encoding)

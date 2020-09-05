@@ -1,9 +1,10 @@
+import time
+
 import cv2
 import numpy as np
-import os
-from img_encodings import encoding
+
 from csv_helper import csv
-import time
+from img_encodings import encoding
 
 path = 'train_imgs'
 imgs, labels = encoding.read_imgs(path)
@@ -15,13 +16,6 @@ frameHeight = 720
 frame_rate = 30
 
 cap = cv2.VideoCapture(0)
-
-# width is id number 3, height is id 4
-# cap.set(3, frameWidth)
-# cap.set(4, frameHeight)
-
-# change brightness to 150
-# cap.set(10, 150)
 
 prev = 0
 RESIZE_FACTOR = 4
@@ -36,7 +30,7 @@ while True:
     if time_elapsed > 1. / frame_rate:
         prev = time.time()
 
-        img_resized = cv2.resize(img.copy(), None, fx=1/RESIZE_FACTOR, fy=1/RESIZE_FACTOR)
+        img_resized = cv2.resize(img.copy(), None, fx=1 / RESIZE_FACTOR, fy=1 / RESIZE_FACTOR)
         img_color = cv2.cvtColor(img_resized, cv2.COLOR_BGR2RGB)
 
         # find current face location and encodings
@@ -51,13 +45,12 @@ while True:
             if matches[best_index]:
                 name = labels[best_index].upper()
                 y1, x2, y2, x1 = list(map(lambda x: x * RESIZE_FACTOR, face_loc))
-                cv2.rectangle(img, (x1, y1), (x2, y2), (0,255,0),2)
-                cv2.rectangle(img, (x1,y2-35), (x2, y2), (0,255,0), cv2.FILLED)
-                cv2.putText(img, name, (x1+5, y2-5), cv2.FONT_HERSHEY_COMPLEX, 0.5, (255,255,255), 2)
+                cv2.rectangle(img, (x1, y1), (x2, y2), (0, 255, 0), 2)
+                cv2.rectangle(img, (x1, y2 - 35), (x2, y2), (0, 255, 0), cv2.FILLED)
+                cv2.putText(img, name, (x1 + 5, y2 - 5), cv2.FONT_HERSHEY_COMPLEX, 0.5, (255, 255, 255), 2)
                 csv.mark_attendance(name)
 
         cv2.imshow('result', img)
-
 
     wait = cv2.waitKey(1)
     if wait & 0xFF == ord('q'):

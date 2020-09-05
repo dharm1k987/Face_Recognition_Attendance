@@ -2,10 +2,12 @@ from datetime import datetime
 
 FILENAME = 'attendance.csv'
 
+
 def initialize_csv():
     f = open(FILENAME, 'w')
     f.write('NAME,TIME')
     f.close()
+
 
 def mark_attendance(name):
     with open(FILENAME, 'r+') as f:
@@ -16,6 +18,7 @@ def mark_attendance(name):
         if name not in names:
             now = datetime.now().strftime("%H:%M:%S")
             f.writelines(f'\n{name},{now}')
+
 
 def prepare_final_report(all_students):
     all_students = set(all_students)
@@ -31,12 +34,3 @@ def prepare_final_report(all_students):
         for student in all_students:
             # absent students
             f.writelines(f'\n{student},00:00:00')
-
-
-
-
-
-
-
-
-
